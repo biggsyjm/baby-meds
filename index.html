@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Baby Meds">
+<meta name="theme-color" content="#0f1117">
+<title>Baby Meds</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230f1117' width='100' height='100' rx='20'/><text y='70' x='50' text-anchor='middle' font-size='55'>💊</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#0f1117;--surface:#181b24;--surface-hover:#1e2230;--text:#e2e4ea;--text-soft:#7a7f8e;--text-muted:#505566;
+--border:#2a2e3a;--border-light:#333847;--input-bg:#12141c;
+--accent:#d4956a;--accent-soft:rgba(212,149,106,0.12);--accent-border:rgba(212,149,106,0.3);
+--green:#4ade80;--green-soft:rgba(74,222,128,0.1);--green-border:rgba(74,222,128,0.25);
+--red:#f87171;--red-soft:rgba(248,113,113,0.1);--red-border:rgba(248,113,113,0.3);
+--yellow:#fbbf24;--yellow-soft:rgba(251,191,36,0.1);--yellow-border:rgba(251,191,36,0.25);
+--purple:#a78bfa;--purple-soft:rgba(167,139,250,0.1);--purple-border:rgba(167,139,250,0.25);
+--shadow:0 2px 8px rgba(0,0,0,0.3),0 1px 3px rgba(0,0,0,0.2);
+}
+[data-theme="light"]{
+--bg:#f5f6fa;--surface:#ffffff;--surface-hover:#f0f1f5;--text:#1a1c24;--text-soft:#6b7085;--text-muted:#a0a5b8;
+--border:#e2e4ec;--border-light:#ecedf3;--input-bg:#f8f9fc;
+--accent:#c07a4a;--accent-soft:rgba(192,122,74,0.08);--accent-border:rgba(192,122,74,0.25);
+--green:#16a34a;--green-soft:rgba(22,163,74,0.08);--green-border:rgba(22,163,74,0.2);
+--red:#dc2626;--red-soft:rgba(220,38,38,0.07);--red-border:rgba(220,38,38,0.2);
+--yellow:#ca8a04;--yellow-soft:rgba(202,138,4,0.08);--yellow-border:rgba(202,138,4,0.2);
+--purple:#7c3aed;--purple-soft:rgba(124,58,237,0.06);--purple-border:rgba(124,58,237,0.2);
+--shadow:0 1px 4px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+}
+body{font-family:'SF Mono','Fira Code','JetBrains Mono','Cascadia Code',monospace;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:100px;transition:background .3s,color .3s}
+.header{padding:20px 20px 12px;display:flex;justify-content:space-between;align-items:center}
+.card{background:var(--surface);border-radius:12px;padding:18px 20px;margin:0 16px 10px;border:1px solid var(--border);box-shadow:var(--shadow);transition:all .2s}
+.pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:6px;display:block}
+.sec-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);padding:18px 20px 8px}
+.btn{width:100%;padding:14px 16px;border-radius:10px;border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px;text-transform:uppercase;transition:all .15s}
+.btn-sm{padding:6px 12px;border-radius:8px;border:none;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px;text-transform:uppercase}
+.nav-btn{background:none;border:none;color:var(--accent);font-size:12px;font-weight:600;cursor:pointer;padding:8px 0;font-family:inherit;letter-spacing:.5px;text-transform:uppercase}
+.theme-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
+.input{width:100%;padding:12px 14px;border-radius:8px;font-size:14px;font-family:inherit;color:var(--text);background:var(--input-bg);border:1px solid var(--border);outline:none;box-sizing:border-box;transition:border-color .15s}
+.input:focus{border-color:var(--accent)}
+.med-opt{padding:12px 14px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;transition:all .15s}
+.med-opt.selected{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 20px rgba(212,149,106,.08)}
+.med-opt.selected .med-name{color:var(--accent)}
+.interval-btn{flex:1;padding:10px 0;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text-soft);transition:all .15s}
+.interval-btn.selected{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);box-shadow:0 0 20px rgba(212,149,106,.08)}
+.interval-btn.purple.selected{border-color:var(--purple);background:var(--purple-soft);color:var(--purple);box-shadow:0 0 20px rgba(167,139,250,.08)}
+.del-btn{background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;opacity:.4;padding:4px 8px}
+.empty{text-align:center;padding:48px 32px;color:var(--text-muted)}
+.view{display:none}.view.active{display:block}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.overdue-dot{animation:pulse 1.5s ease-in-out infinite}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+// ── Storage ──
+const DOSE_KEY = 'baby-meds-doses';
+const TEMP_KEY = 'baby-meds-temps';
+const THEME_KEY = 'baby-meds-theme';
+
+function loadJSON(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } }
+function saveJSON(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+
+let state = {
+  doses: loadJSON(DOSE_KEY),
+  temps: loadJSON(TEMP_KEY),
+  isDark: localStorage.getItem(THEME_KEY) !== 'light',
+  view: 'home',
+  addMode: 'single',
+  selectedMed: null,
+  customName: '',
+  dosage: '',
+  dateTime: '',
+  intervalHrs: 6,
+  timesPerDay: 2,
+  totalDays: 10,
+  tempValue: '',
+  tempDateTime: '',
+  tempNote: '',
+};
+
+function setState(updates) {
+  Object.assign(state, updates);
+  if ('doses' in updates) saveJSON(DOSE_KEY, state.doses);
+  if ('temps' in updates) saveJSON(TEMP_KEY, state.temps);
+  if ('isDark' in updates) { localStorage.setItem(THEME_KEY, state.isDark ? 'dark' : 'light'); document.documentElement.setAttribute('data-theme', state.isDark ? 'dark' : 'light'); }
+  render();
+}
+
+const MEDICINES = [
+  { name: "Children's Tylenol", defaultDose: "3.75 mL", intervalHrs: 6 },
+  { name: "Children's Motrin", defaultDose: "3.75 mL", intervalHrs: 6 },
+  { name: "Other", defaultDose: "", intervalHrs: 6 },
+];
+
+// ── Helpers ──
+function fmtTime(d) { return new Date(d).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }); }
+function fmtDate(d) {
+  const x = new Date(d), now = new Date();
+  const y = new Date(now); y.setDate(y.getDate() - 1);
+  const tm = new Date(now); tm.setDate(tm.getDate() + 1);
+  if (x.toDateString() === now.toDateString()) return 'Today';
+  if (x.toDateString() === y.toDateString()) return 'Yesterday';
+  if (x.toDateString() === tm.toDateString()) return 'Tomorrow';
+  return x.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+function fmtDT(d) { return fmtDate(d) + ' at ' + fmtTime(d); }
+function timeUntil(d) {
+  const diff = new Date(d) - new Date();
+  if (diff <= 0) return 'Now';
+  const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000);
+  return h > 0 ? h + 'h ' + m + 'm' : m + 'm';
+}
+function localDT(d) { const x = new Date(d); return new Date(x.getTime() - x.getTimezoneOffset() * 60000).toISOString().slice(0, 16); }
+function pastDue(d) { return new Date(d) <= new Date(); }
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function tempStatus(v) {
+  const n = parseFloat(v);
+  if (isNaN(n)) return { cls: '', label: '' };
+  if (n >= 100.4) return { fg: 'var(--red)', bg: 'var(--red-soft)', border: 'var(--red-border)', label: 'Fever' };
+  if (n >= 99.4) return { fg: 'var(--yellow)', bg: 'var(--yellow-soft)', border: 'var(--yellow-border)', label: 'Elevated' };
+  return { fg: 'var(--green)', bg: 'var(--green-soft)', border: 'var(--green-border)', label: 'Normal' };
+}
+
+function genRegimen(med, dose, tpd, days, start) {
+  const out = [], s = new Date(start), intMs = (24 / tpd) * 3600000;
+  for (let d = 0; d < days; d++) for (let t = 0; t < tpd; t++) {
+    const at = new Date(s.getTime() + d * 86400000 + t * intMs);
+    out.push({ id: Date.now() + '-' + d + '-' + t, medicine: med, dosage: dose, givenAt: at.toISOString(), nextDue: new Date(at.getTime() + intMs).toISOString(), intervalHrs: intMs / 3600000, confirmed: false, confirmedAt: null, regimenTag: med + ' ' + days + 'd', doseNumber: d * tpd + t + 1, totalDoses: days * tpd });
+  }
+  return out;
+}
+
+function getNextDue() {
+  const p = state.doses.filter(d => !d.confirmed);
+  return p.length ? p.reduce((a, b) => new Date(a.nextDue) < new Date(b.nextDue) ? a : b) : null;
+}
+
+function getRegimens() {
+  const r = {};
+  state.doses.forEach(d => { if (!d.regimenTag) return; if (!r[d.regimenTag]) r[d.regimenTag] = { total: 0, done: 0, tag: d.regimenTag, medicine: d.medicine, dosage: d.dosage }; r[d.regimenTag].total++; if (d.confirmed) r[d.regimenTag].done++; });
+  return r;
+}
+
+// ── Actions ──
+function confirmDose(id) { setState({ doses: state.doses.map(d => d.id === id ? { ...d, confirmed: true, confirmedAt: new Date().toISOString() } : d) }); }
+function deleteDose(id) { setState({ doses: state.doses.filter(d => d.id !== id) }); }
+function deleteTemp(id) { setState({ temps: state.temps.filter(t => t.id !== id) }); }
+function deleteRegimen(tag) { if (confirm('Delete entire "' + tag + '" regimen?')) setState({ doses: state.doses.filter(d => d.regimenTag !== tag) }); }
+
+function goHome() { setState({ view: 'home' }); }
+function goHistory() { setState({ view: 'history' }); }
+function goAddDose(mode) { setState({ view: 'add', addMode: mode || 'single', selectedMed: null, customName: '', dosage: '', dateTime: localDT(new Date()), intervalHrs: 6, timesPerDay: 2, totalDays: 10 }); }
+function goAddTemp() { setState({ view: 'addTemp', tempValue: '', tempDateTime: localDT(new Date()), tempNote: '' }); }
+function toggleTheme() { setState({ isDark: !state.isDark }); }
+
+function selectMed(i) {
+  const med = MEDICINES[i];
+  setState({ selectedMed: i, dosage: med.defaultDose, intervalHrs: med.intervalHrs, customName: '' });
+}
+
+function logSingleDose() {
+  const med = MEDICINES[state.selectedMed];
+  const name = med.name === 'Other' ? state.customName || 'Other' : med.name;
+  if (!name || !state.dosage || !state.dateTime) return;
+  const givenAt = new Date(state.dateTime).toISOString();
+  const nextDue = new Date(new Date(state.dateTime).getTime() + state.intervalHrs * 3600000).toISOString();
+  setState({ doses: [{ id: Date.now().toString(), medicine: name, dosage: state.dosage, givenAt, nextDue, intervalHrs: state.intervalHrs, confirmed: false, confirmedAt: null, regimenTag: null, doseNumber: null, totalDoses: null }, ...state.doses], view: 'home' });
+}
+
+function logRegimen() {
+  const med = MEDICINES[state.selectedMed];
+  const name = med.name === 'Other' ? state.customName || 'Other' : med.name;
+  if (!name || !state.dosage || !state.dateTime) return;
+  setState({ doses: [...genRegimen(name, state.dosage, state.timesPerDay, state.totalDays, state.dateTime), ...state.doses], view: 'home' });
+}
+
+function logTemp() {
+  if (!state.tempValue || !state.tempDateTime) return;
+  setState({ temps: [{ id: Date.now().toString(), temp: parseFloat(state.tempValue), recordedAt: new Date(state.tempDateTime).toISOString(), note: state.tempNote.trim() || null }, ...state.temps], view: 'home' });
+}
+
+// ── Render ──
+function render() {
+  const app = document.getElementById('app');
+  if (state.view === 'home') app.innerHTML = renderHome();
+  else if (state.view === 'add') app.innerHTML = renderAdd();
+  else if (state.view === 'addTemp') app.innerHTML = renderAddTemp();
+  else if (state.view === 'history') app.innerHTML = renderHistory();
+  bindEvents();
+}
+
+function pill(bg, fg, border, text) {
+  return '<span class="pill" style="background:' + bg + ';color:' + fg + ';border:1px solid ' + (border || fg + '30') + '">' + esc(text) + '</span>';
+}
+
+function renderHome() {
+  const nd = getNextDue();
+  const regs = getRegimens();
+  const activeRegs = Object.values(regs).filter(r => r.done < r.total);
+  const pending = state.doses.filter(d => !d.confirmed);
+  const recent = state.doses.filter(d => d.confirmed).slice(0, 5);
+  const recentTemps = [...state.temps].sort((a, b) => new Date(b.recordedAt) - new Date(a.recordedAt)).slice(0, 5);
+  const latestTemp = state.temps.length ? state.temps.reduce((a, b) => new Date(a.recordedAt) > new Date(b.recordedAt) ? a : b) : null;
+  const todayStr = new Date().toDateString();
+  const dosesToday = state.doses.filter(d => d.confirmed && d.confirmedAt && new Date(d.confirmedAt).toDateString() === todayStr).length;
+  const tempsToday = state.temps.filter(t => new Date(t.recordedAt).toDateString() === todayStr).length;
+
+  let h = '';
+
+  // Header
+  h += '<div class="header"><div><h1 style="font-size:18px;font-weight:800;letter-spacing:-.3px"><span style="color:var(--accent)">💊</span> baby meds</h1><div style="font-size:10px;color:var(--text-muted);margin-top:3px;letter-spacing:1px;text-transform:uppercase">dose & temp tracker</div></div><div style="display:flex;gap:8px;align-items:center"><button class="theme-btn" onclick="toggleTheme()">' + (state.isDark ? '☀️' : '🌙') + '</button><button class="nav-btn" onclick="goHistory()">history →</button></div></div>';
+
+  // Stats strip
+  const ndColor = nd ? (pastDue(nd.nextDue) ? 'var(--red)' : 'var(--accent)') : 'var(--green)';
+  const ndDot = nd && pastDue(nd.nextDue) ? ' overdue-dot' : '';
+  h += '<div style="margin:0 16px 10px">';
+  h += '<div style="display:flex;border-radius:10px 10px 0 0;overflow:hidden;border:1px solid var(--border);border-bottom:none">';
+  h += '<div style="flex:1;padding:10px 0;text-align:center;background:var(--surface);border-right:1px solid var(--border)"><div style="font-size:20px;font-weight:800;color:var(--green);letter-spacing:-1px">' + dosesToday + '</div><div style="font-size:8px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">doses today</div></div>';
+  h += '<div style="flex:1;padding:10px 0;text-align:center;background:var(--surface);border-right:1px solid var(--border)"><div style="font-size:20px;font-weight:800;color:var(--red);letter-spacing:-1px">' + tempsToday + '</div><div style="font-size:8px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">temps today</div></div>';
+  h += '<div style="flex:1;padding:10px 0;text-align:center;background:var(--surface)"><div style="font-size:20px;font-weight:800;color:var(--purple);letter-spacing:-1px">' + activeRegs.length + '</div><div style="font-size:8px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px">active regimens</div></div>';
+  h += '</div>';
+  // Next dose bar
+  h += '<div style="padding:10px 14px;background:var(--surface);border-radius:0 0 10px 10px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">';
+  h += '<div style="display:flex;align-items:center;gap:8px"><div class="' + ndDot + '" style="width:6px;height:6px;border-radius:3px;background:' + ndColor + ';box-shadow:0 0 6px ' + ndColor + '60"></div>';
+  if (nd) {
+    h += '<span style="font-size:11px;font-weight:600;color:var(--text-soft)">next dose <span style="color:' + ndColor + ';font-weight:800">' + (pastDue(nd.nextDue) ? 'OVERDUE' : esc(fmtTime(nd.nextDue))) + '</span></span>';
+  } else {
+    h += '<span style="font-size:11px;font-weight:600;color:var(--green)">no doses pending</span>';
+  }
+  h += '</div>';
+  if (nd) h += '<span style="font-size:10px;font-weight:700;color:' + ndColor + ';letter-spacing:.3px">' + esc(nd.medicine) + ' · ' + esc(nd.dosage) + '</span>';
+  h += '</div></div>';
+
+  // Latest temp
+  if (latestTemp) {
+    const tc = tempStatus(latestTemp.temp);
+    h += '<div class="card" style="border-color:' + tc.border + ';box-shadow:0 0 20px ' + tc.fg + '10"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><span class="label">latest temperature</span><div style="display:flex;align-items:baseline;gap:10px;margin-top:4px"><span style="font-size:30px;font-weight:800;color:' + tc.fg + ';letter-spacing:-1px">' + latestTemp.temp + '°F</span>' + pill(tc.bg, tc.fg, tc.border, tc.label) + '</div><div style="font-size:11px;color:var(--text-soft);margin-top:6px">' + esc(fmtDT(latestTemp.recordedAt)) + (latestTemp.note ? ' · ' + esc(latestTemp.note) : '') + '</div></div><span style="font-size:24px;opacity:.4">🌡️</span></div></div>';
+  }
+
+  // Next due card
+  if (nd) {
+    const isOD = pastDue(nd.nextDue);
+    const color = isOD ? 'var(--red)' : 'var(--accent)';
+    const borderC = isOD ? 'var(--red-border)' : 'var(--accent-border)';
+    h += '<div class="card" style="border-color:' + borderC + ';box-shadow:0 0 20px ' + color + '10"><span class="label">next dose due</span>';
+    h += '<div style="font-size:26px;font-weight:800;letter-spacing:-1px;margin:4px 0;color:' + color + '">' + (isOD ? 'OVERDUE' : esc(timeUntil(nd.nextDue))) + '</div>';
+    h += '<div style="display:flex;gap:6px;align-items:center;margin:8px 0 14px;flex-wrap:wrap">';
+    h += pill('var(--accent-soft)', 'var(--accent)', 'var(--accent-border)', nd.medicine);
+    h += pill('var(--surface)', 'var(--text-soft)', 'var(--border)', nd.dosage);
+    if (nd.regimenTag) h += pill('var(--purple-soft)', 'var(--purple)', 'var(--purple-border)', 'dose ' + nd.doseNumber + '/' + nd.totalDoses);
+    h += '<span style="font-size:11px;color:var(--text-soft)">' + esc(fmtDT(nd.nextDue)) + '</span></div>';
+    h += '<button class="btn" style="background:' + (isOD ? 'var(--red)' : 'var(--green)') + '" onclick="confirmDose(\'' + nd.id + '\')">✓ mark dose given</button></div>';
+  }
+
+  // Action buttons
+  h += '<div style="padding:6px 16px 4px;display:flex;gap:8px">';
+  h += '<button class="btn" style="flex:1;padding:12px 0;font-size:11px;background:var(--accent)" onclick="goAddDose(\'single\')">+ dose</button>';
+  h += '<button class="btn" style="flex:1;padding:12px 0;font-size:11px;background:var(--purple)" onclick="goAddDose(\'regimen\')">+ regimen</button>';
+  h += '<button class="btn" style="flex:1;padding:12px 0;font-size:11px;background:var(--red)" onclick="goAddTemp()">+ temp</button>';
+  h += '</div>';
+
+  // Active regimens
+  if (activeRegs.length) {
+    h += '<div class="sec-title">active regimens</div>';
+    activeRegs.forEach(r => {
+      const pct = Math.round(r.done / r.total * 100);
+      h += '<div class="card" style="border-color:var(--purple-border);box-shadow:0 0 20px rgba(167,139,250,.06)">';
+      h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="display:flex;gap:6px;align-items:center"><span style="font-weight:700;font-size:13px">' + esc(r.medicine) + '</span>' + pill('var(--purple-soft)', 'var(--purple)', 'var(--purple-border)', r.dosage) + '</div><span style="font-size:12px;color:var(--text-soft);font-weight:600">' + r.done + '/' + r.total + '</span></div>';
+      h += '<div style="height:6px;border-radius:3px;background:var(--border);overflow:hidden"><div style="height:100%;border-radius:3px;background:var(--purple);width:' + pct + '%;box-shadow:0 0 8px rgba(167,139,250,.4)"></div></div>';
+      h += '<div style="display:flex;justify-content:space-between;margin-top:6px"><span style="font-size:10px;color:var(--text-muted)">' + pct + '% complete</span><button style="background:none;border:none;color:var(--text-muted);font-size:10px;cursor:pointer;font-family:inherit" onclick="deleteRegimen(\'' + esc(r.tag) + '\')">delete</button></div></div>';
+    });
+  }
+
+  // Recent temps
+  if (recentTemps.length > 1) {
+    h += '<div class="sec-title">recent temperatures</div><div class="card" style="padding:14px">';
+    recentTemps.forEach((tp, i) => {
+      const tc = tempStatus(tp.temp);
+      h += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;' + (i < recentTemps.length - 1 ? 'border-bottom:1px solid var(--border)' : '') + '"><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:800;font-size:16px;color:' + tc.fg + ';min-width:65px">' + tp.temp + '°F</span>' + pill(tc.bg, tc.fg, tc.border, tc.label) + '</div><span style="font-size:10px;color:var(--text-muted)">' + esc(fmtTime(tp.recordedAt)) + '</span></div>';
+    });
+    h += '</div>';
+  }
+
+  // Upcoming doses
+  const upcoming = pending.filter(d => nd && d.id !== nd.id).sort((a, b) => new Date(a.nextDue) - new Date(b.nextDue)).slice(0, 6);
+  if (upcoming.length) {
+    h += '<div class="sec-title">upcoming</div>';
+    upcoming.forEach(d => {
+      h += '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1"><div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;flex-wrap:wrap"><span style="font-weight:700;font-size:13px">' + esc(d.medicine) + '</span>';
+      if (d.regimenTag) h += pill('var(--purple-soft)', 'var(--purple)', 'var(--purple-border)', d.doseNumber + '/' + d.totalDoses);
+      h += '</div><div style="font-size:11px;color:var(--text-soft)">' + esc(fmtDT(d.nextDue)) + ' · ' + (pastDue(d.nextDue) ? '<span style="color:var(--red);font-weight:700">overdue</span>' : 'in ' + esc(timeUntil(d.nextDue))) + '</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">' + esc(d.dosage) + '</div></div>';
+      h += '<button class="btn-sm" style="background:var(--green)" onclick="confirmDose(\'' + d.id + '\')">✓ given</button></div></div>';
+    });
+  }
+
+  // Recently completed
+  if (recent.length) {
+    h += '<div class="sec-title">recently completed</div>';
+    recent.forEach(d => {
+      h += '<div class="card" style="opacity:.5"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:12px">' + esc(d.medicine) + '</div><div style="font-size:11px;color:var(--text-muted)">' + esc(fmtDT(d.givenAt)) + ' · ' + esc(d.dosage) + (d.regimenTag ? ' · ' + d.doseNumber + '/' + d.totalDoses : '') + '</div></div>' + pill('var(--green-soft)', 'var(--green)', 'var(--green-border)', '✓') + '</div></div>';
+    });
+  }
+
+  if (!state.doses.length && !state.temps.length) {
+    h += '<div class="empty"><div style="font-size:36px;margin-bottom:12px;opacity:.4">💊</div><div style="font-weight:600;font-size:13px;margin-bottom:4px">no data yet</div><div style="font-size:11px">log a dose, start a regimen, or record a temp</div></div>';
+  }
+
+  return h;
+}
+
+function renderAddTemp() {
+  let h = '<div class="header"><button class="nav-btn" onclick="goHome()">← back</button><h1 style="font-size:16px;font-weight:800">🌡️ record temp</h1><button class="theme-btn" onclick="toggleTheme()">' + (state.isDark ? '☀️' : '🌙') + '</button></div>';
+  h += '<div style="padding:0 16px">';
+  h += '<div style="margin-bottom:18px"><span class="label">temperature (°F)</span><input class="input" id="tempVal" type="number" step="0.1" inputmode="decimal" placeholder="98.6" style="font-size:22px;font-weight:800;text-align:center;letter-spacing:1px" value="' + esc(state.tempValue) + '"></div>';
+
+  if (state.tempValue) {
+    const tc = tempStatus(state.tempValue);
+    if (tc.label) h += '<div style="display:flex;justify-content:center;margin-bottom:18px"><div style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:10px;background:' + tc.bg + ';border:1px solid ' + tc.border + '"><span style="font-size:26px;font-weight:800;color:' + tc.fg + '">' + esc(state.tempValue) + '°F</span>' + pill(tc.bg, tc.fg, tc.border, tc.label) + '</div></div>';
+  }
+
+  h += '<div class="card" style="margin:0 0 18px;padding:14px"><span class="label" style="margin-bottom:10px">thresholds</span>';
+  [['var(--green)', 'Under 99.4°F — Normal'], ['var(--yellow)', '99.4–100.3°F — Elevated'], ['var(--red)', '100.4°F+ — Fever']].forEach(([c, l]) => {
+    h += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><div style="width:8px;height:8px;border-radius:4px;background:' + c + ';box-shadow:0 0 6px ' + c + '40"></div><span style="font-size:11px;color:var(--text-soft)">' + l + '</span></div>';
+  });
+  h += '</div>';
+
+  h += '<div style="margin-bottom:18px"><span class="label">date & time</span><input class="input" id="tempDT" type="datetime-local" value="' + esc(state.tempDateTime) + '"></div>';
+  h += '<div style="margin-bottom:22px"><span class="label">note (optional)</span><input class="input" id="tempNote" type="text" placeholder="e.g., after nap, before tylenol" value="' + esc(state.tempNote) + '"></div>';
+  h += '<button class="btn" style="background:var(--red);opacity:' + (state.tempValue && state.tempDateTime ? '1' : '.4') + '" onclick="submitTemp()">record temperature</button>';
+  h += '</div>';
+  return h;
+}
+
+function renderAdd() {
+  const isR = state.addMode === 'regimen';
+  let h = '<div class="header"><button class="nav-btn" onclick="goHome()">← back</button><h1 style="font-size:16px;font-weight:800">' + (isR ? 'start regimen' : 'log dose') + '</h1><button class="theme-btn" onclick="toggleTheme()">' + (state.isDark ? '☀️' : '🌙') + '</button></div>';
+
+  // Mode toggle
+  h += '<div style="display:flex;margin:0 16px 18px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">';
+  h += '<button style="flex:1;padding:10px 0;border:none;font-family:inherit;font-weight:700;font-size:11px;cursor:pointer;letter-spacing:.5px;text-transform:uppercase;background:' + (state.addMode === 'single' ? 'var(--accent)' : 'var(--surface)') + ';color:' + (state.addMode === 'single' ? '#fff' : 'var(--text-muted)') + '" onclick="setState({addMode:\'single\'})">one-time</button>';
+  h += '<button style="flex:1;padding:10px 0;border:none;font-family:inherit;font-weight:700;font-size:11px;cursor:pointer;letter-spacing:.5px;text-transform:uppercase;background:' + (state.addMode === 'regimen' ? 'var(--purple)' : 'var(--surface)') + ';color:' + (state.addMode === 'regimen' ? '#fff' : 'var(--text-muted)') + '" onclick="setState({addMode:\'regimen\'})">regimen</button>';
+  h += '</div>';
+
+  h += '<div style="padding:0 16px">';
+
+  // Medicine selection
+  h += '<div style="margin-bottom:18px"><span class="label">medicine</span>';
+  MEDICINES.forEach((med, i) => {
+    const sel = state.selectedMed === i;
+    h += '<div class="med-opt' + (sel ? ' selected' : '') + '" onclick="selectMed(' + i + ')"><span class="med-name" style="font-weight:600;font-size:13px">' + esc(med.name) + '</span>';
+    if (med.defaultDose) h += '<span style="font-size:11px;color:var(--text-muted)">' + esc(med.defaultDose) + ' / ' + med.intervalHrs + 'h</span>';
+    h += '</div>';
+  });
+  h += '</div>';
+
+  if (state.selectedMed !== null && MEDICINES[state.selectedMed].name === 'Other') {
+    h += '<div style="margin-bottom:18px"><span class="label">medicine name</span><input class="input" id="customName" type="text" placeholder="enter medicine name" value="' + esc(state.customName) + '"></div>';
+  }
+
+  if (state.selectedMed !== null) {
+    h += '<div style="margin-bottom:18px"><span class="label">dosage</span><input class="input" id="dosageInput" type="text" placeholder="e.g., 3.75 mL" value="' + esc(state.dosage) + '"></div>';
+    h += '<div style="margin-bottom:18px"><span class="label">' + (isR ? 'start date & time' : 'date & time given') + '</span><input class="input" id="dtInput" type="datetime-local" value="' + esc(state.dateTime) + '"></div>';
+
+    // Interval
+    h += '<div style="margin-bottom:18px"><span class="label">hours between doses</span><div style="display:flex;gap:6px">';
+    [4, 6, 8, 12, 24].forEach(hr => {
+      h += '<button class="interval-btn' + (state.intervalHrs === hr ? ' selected' : '') + '" onclick="setState({intervalHrs:' + hr + '})">' + hr + 'h</button>';
+    });
+    h += '</div></div>';
+
+    if (isR) {
+      h += '<div style="margin-bottom:18px"><span class="label">times per day</span><div style="display:flex;gap:6px">';
+      [1, 2, 3, 4].forEach(n => {
+        h += '<button class="interval-btn purple' + (state.timesPerDay === n ? ' selected' : '') + '" onclick="setState({timesPerDay:' + n + '})">' + n + '×</button>';
+      });
+      h += '</div></div>';
+      h += '<div style="margin-bottom:20px"><span class="label">number of days</span><div style="display:flex;gap:6px">';
+      [3, 5, 7, 10, 14].forEach(d => {
+        h += '<button class="interval-btn purple' + (state.totalDays === d ? ' selected' : '') + '" onclick="setState({totalDays:' + d + '})">' + d + 'd</button>';
+      });
+      h += '</div></div>';
+    }
+
+    // Preview
+    if (state.dateTime) {
+      const previewColor = isR ? 'var(--purple)' : 'var(--accent)';
+      const previewBorder = isR ? 'var(--purple-border)' : 'var(--accent-border)';
+      h += '<div class="card" style="margin:0 0 18px;border-color:' + previewBorder + ';box-shadow:0 0 20px ' + previewColor + '10">';
+      if (isR) {
+        const total = state.timesPerDay * state.totalDays;
+        h += '<span class="label" style="color:var(--purple)">regimen summary</span><div style="font-weight:800;font-size:16px;color:var(--purple)">' + total + ' total doses</div><div style="font-size:11px;color:var(--purple);margin-top:4px;opacity:.7">' + state.timesPerDay + '× daily for ' + state.totalDays + ' days</div><div style="font-size:11px;color:var(--purple);margin-top:2px;opacity:.7">starting ' + esc(fmtDT(state.dateTime)) + '</div>';
+      } else {
+        const nextTime = new Date(new Date(state.dateTime).getTime() + state.intervalHrs * 3600000);
+        h += '<span class="label" style="color:var(--accent)">next dose scheduled</span><div style="font-weight:800;font-size:16px;color:var(--accent)">' + esc(fmtDT(nextTime)) + '</div>';
+      }
+      h += '</div>';
+    }
+
+    const canSubmit = state.dosage && state.dateTime && state.selectedMed !== null && (MEDICINES[state.selectedMed].name !== 'Other' || state.customName);
+    h += '<button class="btn" style="background:' + (isR ? 'var(--purple)' : 'var(--accent)') + ';opacity:' + (canSubmit ? '1' : '.4') + '" onclick="' + (isR ? 'logRegimen()' : 'logSingleDose()') + '">' + (isR ? 'start ' + (state.timesPerDay * state.totalDays) + '-dose regimen' : 'log dose') + '</button>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+function renderHistory() {
+  const allEvents = [
+    ...state.doses.map(d => ({ type: 'dose', time: d.givenAt, data: d })),
+    ...state.temps.map(t => ({ type: 'temp', time: t.recordedAt, data: t })),
+  ].sort((a, b) => new Date(b.time) - new Date(a.time));
+
+  const grouped = {};
+  allEvents.forEach(e => { const k = new Date(e.time).toDateString(); if (!grouped[k]) grouped[k] = []; grouped[k].push(e); });
+
+  let h = '<div class="header"><button class="nav-btn" onclick="goHome()">← back</button><h1 style="font-size:16px;font-weight:800">history</h1><button class="theme-btn" onclick="toggleTheme()">' + (state.isDark ? '☀️' : '🌙') + '</button></div>';
+
+  Object.entries(grouped).forEach(([dk, events]) => {
+    h += '<div class="sec-title">' + esc(fmtDate(new Date(dk))) + '</div>';
+    events.forEach(ev => {
+      if (ev.type === 'temp') {
+        const tp = ev.data, tc = tempStatus(tp.temp);
+        h += '<div class="card" style="border-left:3px solid ' + tc.fg + '"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:10px;color:var(--text-muted)">🌡️ ' + esc(fmtTime(tp.recordedAt)) + '</span><span style="font-weight:800;font-size:16px;color:' + tc.fg + '">' + tp.temp + '°F</span>' + pill(tc.bg, tc.fg, tc.border, tc.label) + '</div><button class="del-btn" onclick="deleteTemp(\'' + tp.id + '\')">×</button></div>';
+        if (tp.note) h += '<div style="font-size:11px;color:var(--text-muted);margin-top:4px">' + esc(tp.note) + '</div>';
+        h += '</div>';
+      } else {
+        const d = ev.data;
+        h += '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1"><div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;flex-wrap:wrap"><span style="font-weight:700;font-size:13px">' + esc(d.medicine) + '</span>';
+        if (d.confirmed) h += pill('var(--green-soft)', 'var(--green)', 'var(--green-border)', 'done');
+        else if (pastDue(d.nextDue)) h += pill('var(--red-soft)', 'var(--red)', 'var(--red-border)', 'overdue');
+        else h += pill('var(--accent-soft)', 'var(--accent)', 'var(--accent-border)', 'pending');
+        if (d.regimenTag) h += pill('var(--purple-soft)', 'var(--purple)', 'var(--purple-border)', d.doseNumber + '/' + d.totalDoses);
+        h += '</div><div style="font-size:11px;color:var(--text-soft)">' + (d.confirmed ? 'given' : 'scheduled') + ': ' + esc(fmtTime(d.givenAt)) + ' · ' + esc(d.dosage) + '</div>';
+        if (d.confirmedAt) h += '<div style="font-size:10px;color:var(--green)">confirmed ' + esc(fmtTime(d.confirmedAt)) + '</div>';
+        h += '</div><div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end">';
+        if (!d.confirmed) h += '<button class="btn-sm" style="background:var(--green)" onclick="confirmDose(\'' + d.id + '\')">✓</button>';
+        h += '<button class="del-btn" onclick="deleteDose(\'' + d.id + '\')">×</button></div></div></div>';
+      }
+    });
+  });
+
+  if (!allEvents.length) h += '<div class="empty"><div style="font-size:11px">no history yet</div></div>';
+
+  if (allEvents.length) {
+    h += '<div style="padding:24px 16px"><button style="width:100%;padding:14px;border-radius:10px;border:1px solid var(--red-border);background:transparent;color:var(--red);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px;text-transform:uppercase" onclick="clearAll()">clear all history</button></div>';
+  }
+  return h;
+}
+
+function clearAll() { if (confirm('Clear ALL history?')) setState({ doses: [], temps: [] }); }
+function submitTemp() {
+  const v = document.getElementById('tempVal')?.value;
+  const dt = document.getElementById('tempDT')?.value;
+  const n = document.getElementById('tempNote')?.value;
+  if (v) state.tempValue = v;
+  if (dt) state.tempDateTime = dt;
+  if (n !== undefined) state.tempNote = n;
+  logTemp();
+}
+
+function bindEvents() {
+  const sync = (id, key) => { const el = document.getElementById(id); if (el) el.addEventListener('input', () => { state[key] = el.value; if (key === 'tempValue') render(); }); };
+  sync('tempVal', 'tempValue');
+  sync('tempDT', 'tempDateTime');
+  sync('tempNote', 'tempNote');
+  sync('customName', 'customName');
+  sync('dosageInput', 'dosage');
+  sync('dtInput', 'dateTime');
+}
+
+// ── Init ──
+document.documentElement.setAttribute('data-theme', state.isDark ? 'dark' : 'light');
+render();
+
+// Refresh countdowns every 30s
+setInterval(() => { if (state.view === 'home') render(); }, 30000);
+</script>
+</body>
+</html>
