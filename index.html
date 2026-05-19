@@ -143,15 +143,15 @@ function genRegimen(med, dose, tpd, days, start, firstGiven, customTotal) {
     for (let t = 0; t < tpd && doseNum < total; t++) {
       doseNum++;
       const at = new Date(s.getTime() + d * 86400000 + t * intMs);
-      // Calculate next due time based on the current dose time, not the interval
-      const nextDueTime = new Date(at.getTime() + intMs);
       
+      // For nextDue: this dose is "due" at the `at` time
+      // We use `givenAt` as the due time for this specific dose
       out.push({ 
         id: Date.now() + '-' + d + '-' + t + '-' + Math.random().toString(36).substr(2, 9), 
         medicine: med, 
         dosage: dose, 
         givenAt: at.toISOString(), 
-        nextDue: nextDueTime.toISOString(), 
+        nextDue: at.toISOString(), // This dose is due at this time
         intervalHrs: intMs / 3600000, 
         confirmed: firstGiven && doseNum === 1, 
         confirmedAt: firstGiven && doseNum === 1 ? at.toISOString() : null, 
