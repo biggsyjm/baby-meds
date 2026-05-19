@@ -143,15 +143,18 @@ function genRegimen(med, dose, tpd, days, start, firstGiven, customTotal) {
     for (let t = 0; t < tpd && doseNum < total; t++) {
       doseNum++;
       const at = new Date(s.getTime() + d * 86400000 + t * intMs);
+      // Calculate next due time based on the current dose time, not the interval
+      const nextDueTime = new Date(at.getTime() + intMs);
+      
       out.push({ 
-        id: Date.now() + '-' + d + '-' + t, 
+        id: Date.now() + '-' + d + '-' + t + '-' + Math.random().toString(36).substr(2, 9), 
         medicine: med, 
         dosage: dose, 
         givenAt: at.toISOString(), 
-        nextDue: new Date(at.getTime() + intMs).toISOString(), 
+        nextDue: nextDueTime.toISOString(), 
         intervalHrs: intMs / 3600000, 
         confirmed: firstGiven && doseNum === 1, 
-        confirmedAt: firstGiven && doseNum === 1 ? new Date().toISOString() : null, 
+        confirmedAt: firstGiven && doseNum === 1 ? at.toISOString() : null, 
         regimenTag: med + ' ' + total + '-dose', 
         doseNumber: doseNum, 
         totalDoses: total,
@@ -212,8 +215,24 @@ function logSingleDose() {
   const med = MEDICINES[state.selectedMed];
   const name = med.name === 'Other' ? state.customName || 'Other' : med.name;
   if (!name || !state.dosage || !state.dateTime) return;
-  const givenAt = new Date(state.dateTime).toISOString();
-  setState({ doses: [{ id: Date.now().toString(), medicine: name, dosage: state.dosage, givenAt, nextDue: null, intervalHrs: state.intervalHrs, confirmed: true, confirmedAt: new Date().toISOString(), regimenTag: null, doseNumber: null, totalDoses: null, noNextDue: true, canDoseAfter: new Date(new Date(state.dateTime).getTime() + state.intervalHrs * 3600000).toISOString() }, ...state.doses], view: 'home' });
+  const givenAt = new Date(state.dateTime);
+  const canDoseAfterTime = new Date(givenAt.getTime() + state.intervalHrs * 3600000);
+  
+  setState({ doses: [{ 
+    id: Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9), 
+    medicine: name, 
+    dosage: state.dosage, 
+    givenAt: givenAt.toISOString(), 
+    nextDue: null, 
+    intervalHrs: state.intervalHrs, 
+    confirmed: true, 
+    confirmedAt: givenAt.toISOString(), 
+    regimenTag: null, 
+    doseNumber: null, 
+    totalDoses: null, 
+    noNextDue: true, 
+    canDoseAfter: canDoseAfterTime.toISOString() 
+  }, ...state.doses], view: 'home' });
 }
 
 function logRegimen() {
@@ -522,23 +541,49 @@ function submitTemp() {
   if (v) state.tempValue = v;
   if (dt) state.tempDateTime = dt;
   if (n !== undefined) state.tempNote = n;
+  
+  // Validate that we have a valid temperature value
+  if (!state.tempValue || !state.tempDateTime) return;
+  
+  const tempFloat = parseFloat(state.tempValue);
+  if (isNaN(tempFloat)) {
+    alert('Please enter a valid temperature number');
+    return;
+  }
+  
   logTemp();
 }
 
 function bindEvents() {
-  const sync = (id, key) => { const el = document.getElementById(id); if (el) el.addEventListener('input', () => { state[key] = el.value; if (key === 'tempValue') render(); }); };
-  sync('tempVal', 'tempValue');
-  sync('tempDT', 'tempDateTime');
-  sync('tempNote', 'tempNote');
-  sync('customName', 'customName');
-  sync('dosageInput', 'dosage');
-  sync('dtInput', 'dateTime');
+  const sync = (id, key, skipRender) => { 
+    const el = document.getElementById(id); 
+    if (el) el.addEventListener('input', () => { 
+      state[key] = el.value; 
+      if (!skipRender) render(); 
+    }); 
+  };
   
+  // Don't re-render on every keystroke for these fields
+  sync('tempVal', 'tempValue', true);
+  sync('tempDT', 'tempDateTime', true);
+  sync('tempNote', 'tempNote', true);
+  sync('customName', 'customName', true);
+  sync('dosageInput', 'dosage', true);
+  sync('dtInput', 'dateTime', true);
+  
+  // Re-render for these since they affect the UI
   const totalDosesEl = document.getElementById('totalDosesInput');
-  if (totalDosesEl) totalDosesEl.addEventListener('input', () => { state.totalDoses = parseInt(totalDosesEl.value) || 0; render(); });
+  if (totalDosesEl) totalDosesEl.addEventListener('input', () => { state.totalDoses = parseInt(totalDosesEl.value) || 0; });
   
   const firstDoseCheck = document.getElementById('firstDoseCheck');
   if (firstDoseCheck) firstDoseCheck.addEventListener('change', () => { state.firstDoseGiven = firstDoseCheck.checked; render(); });
+  
+  // Add blur events to update preview when user leaves the field
+  const tempValEl = document.getElementById('tempVal');
+  if (tempValEl) tempValEl.addEventListener('blur', () => render());
+  
+  const totalDosesBlur = document.getElementById('totalDosesInput');
+  if (totalDosesBlur) totalDosesBlur.addEventListener('blur', () => render());
 }
 
 // ── Init ──
